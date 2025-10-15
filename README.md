@@ -2,7 +2,7 @@
 
 Call a *Retekess* TD157 pager using *Raspberry PI* and a CC1101 transceiver.
 
-![setup.jpg](doc/setup.jpg "Use a Raspberry PI and a CC1101 to call a Retekess TD157 pager").
+![setup.jpg](doc/setup.jpg "Use a Raspberry PI and a CC1101 to call a Retekess TD157 pager")
 
 This repo comes with two command line applications, `pagercall` and `airsniffer`.
 The first is the actual application to call the pager.
@@ -61,7 +61,14 @@ make
 ### Pagercall
 
 ```
-./pagercall -k <keyboard id> -p <pager id> [--help] [--version]
+Usage: pagercall
+ [--help] [--version] [-k <ID>] [-p <ID>]
+
+Options:
+  --help                    Print help and exit
+  --version                 Print version and exit
+  -k, --keyboard=<ID>       ID of keyboard (1 .. 999)
+  -p, --pager=<ID>          ID of pager (1 .. 999)
 ```
 
 
@@ -69,7 +76,8 @@ make
 
 Program will run for 30 seconds and terminate automatically.
 So start the program and send out the data you want to capture.
-It will output the received signal as a  value-change-dump (VCD) that can be processed by *PulseView* later.
+It will output the received signal as a  [value-change-dump](https://en.wikipedia.org/wiki/Value_change_dump) (VCD) 
+that can be processed by [PulseView](https://sigrok.org/wiki/PulseView).
 
 ```
 ./airsniffer > capture.vcd
@@ -78,7 +86,7 @@ It will output the received signal as a  value-change-dump (VCD) that can be pro
 In folder `doc` you find a file [call_td157-274-1.vcd](doc/call_td157-274-1.vcd) that was created like this.
 It is the capture of the data sent by Retekess keyboard (id 274) to pager 1 to make it ring (action 4).
 
-You can use [PulseView](https://sigrok.org/wiki/PulseView) to open that file.
+You can use *PulseView* to open that file.
 (Note: On Linux you can install *PulseView* with `apt install pulseview`)
 
 The following image shows an excerpt of the captured data.

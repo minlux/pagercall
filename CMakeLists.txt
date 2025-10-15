@@ -28,6 +28,10 @@ add_executable(pagercall
 
 
 #libraries / dependencies
-link_libraries(pagercall PRIVATE
+target_link_libraries(airsniffer PRIVATE
+  wiringPi
+)
+target_link_libraries(pagercall PRIVATE
+  m
   wiringPi
 )

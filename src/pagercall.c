@@ -3,12 +3,32 @@
 #include <math.h>
 #include "wiringPi.h"
 #include "wiringPiSPI.h"
-#include "dep/argtable3.h"
+#include "argtable3/argtable3.h"
 #include "mx_cc1101.h"
 
 
 #define APP_NAME "pagercall"
 #define APP_VERSION "1.0.0"
+
+
+
+static void print_usage(void **argtable)
+{
+   puts("Usage: " APP_NAME );
+   arg_print_syntax(stdout, argtable, "\n\n");
+}
+
+static void print_help(void **argtable)
+{
+   // Description
+   puts("Call Retekess Pager using Raspberry PI and CC1101.\n");
+   // Usage
+   print_usage(argtable);
+   // Options
+   puts("Options:");
+   arg_print_glossary(stdout, argtable, "  %-25s %s\n");
+}
+
 
 
 // Symbols for encoding bits (each bit is represented by 4 output bits)
@@ -56,7 +76,7 @@ int main(int argc, char *argv[])
     struct arg_int *argKeyboard;
     struct arg_int *argPager;
     struct arg_end *argEnd;
-    void * const argtable[] =
+    void * argtable[] =
     {
         argHelp = arg_lit0(NULL, "help", "Print help and exit"),
         argVersion = arg_lit0(NULL, "version", "Print version and exit"),
@@ -104,7 +124,7 @@ int main(int argc, char *argv[])
     delay(10);
 
     // Use default settings from library (f = 433.92MHz, ASK/OOK modulation, 100 kHz bandwidth, baudrate 4800 bps)
-    // Do not use GDO0/2; Map RX signal/data to GDO2; RX attenuation doesn't matter, as we are only transmitting
+    // Do not use GDO0/2; RX attenuation doesn't matter, as we are only transmitting
     mx_cc1101_init(MX_CC1101_GDO_CFG_TRISTATE, MX_CC1101_GDO_CFG_TRISTATE, MX_CC1101_RX_ATTENUATION_0DB);
 
     // Setup telegram to call the respective pager
@@ -122,8 +142,7 @@ int main(int argc, char *argv[])
         // Wait until transmission is complete
         while (!mx_cc1101_is_idle())
         {
-            putchar('.');
-            delay(1); //at 4k8bps, transmission of one byte takes ~1.67ms ... so the length is a good value for delay
+            delay(len); //at 4k8bps, transmission of one byte takes ~1.67ms ... so the length is a good value for delay
         }
     }
 
